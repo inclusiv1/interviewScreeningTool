@@ -8,7 +8,6 @@ import * as questionService from './services/questionService';
 // Mock components that might be problematic or slow
 vi.mock('./components/layout/Header', () => ({ default: () => <div>Header</div> }));
 vi.mock('./components/layout/Navigation', () => ({ default: () => <div>Navigation</div> }));
-vi.mock('./components/layout/Footer', () => ({ default: () => <div>Footer</div> }));
 
 // Mock API services
 vi.mock('./services/api', () => ({
@@ -47,7 +46,6 @@ describe('App', () => {
     
     expect(screen.getByText('Header')).toBeInTheDocument();
     expect(screen.getByText('Navigation')).toBeInTheDocument();
-    expect(screen.getByText('Footer')).toBeInTheDocument();
   });
 
   it('fetches default questions on mount', async () => {

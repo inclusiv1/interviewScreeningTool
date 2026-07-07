@@ -9,7 +9,6 @@ import AIGeneratorPage from './components/AIGeneratorPage/index';
 import AuthModal from './components/AuthModal/index';
 import Header from './components/layout/Header';
 import Navigation from './components/layout/Navigation';
-import Footer from './components/layout/Footer';
 import SingleCardView from './components/SingleCardView/index';
 import { getQuestionSetById, getQuestionSets } from './services/questionService';
 import { fetchDefaultQuestions, generateQuestionsForTopicFromServer, getCurrentUser, logout } from './services/api';
@@ -278,8 +277,6 @@ const AppContent: React.FC = () => {
           <Route path="/generator" element={<AIGeneratorPage onQuestionsGenerated={handleQuestionsGenerated} user={user} />} />
         </Routes>
       </main>
-
-      <Footer />
     </div>
   );
 };
