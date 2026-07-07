@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3003:3000"
+      - "3004:3001"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - REACT_APP_GEMINI_API_KEY=${REACT_APP_GEMINI_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=3001
+      - REACT_APP_API_BASE=http://localhost:3004
+    volumes:
+      - ./database.db:/app/database.db
+    restart: always
