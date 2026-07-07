@@ -21,31 +21,67 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'build')));
 
 // Authentication Middleware
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Authentication token required' });
+  
+  if (token) {
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) return res.status(403).json({ error: 'Invalid or expired token' });
+      req.user = user;
+      next();
+    });
+    return;
+  }
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: 'Invalid or expired token' });
-    req.user = user;
-    next();
-  });
+  // Fallback to default user if no token provided
+  try {
+    const db = getDb();
+    const defaultUser = await db.get('SELECT * FROM users WHERE username = ?', ['interviewer']);
+    if (defaultUser) {
+      req.user = { 
+        userId: defaultUser.id, 
+        username: defaultUser.username, 
+        isAdmin: Boolean(defaultUser.is_admin) 
+      };
+      next();
+    } else {
+      res.status(401).json({ error: 'Authentication token required' });
+    }
+  } catch (e) {
+    res.status(500).json({ error: 'Internal server error during authentication' });
+  }
 };
 
 // Optional Authentication Middleware (doesn't fail if no token)
-const optionalAuthenticateToken = (req, res, next) => {
+const optionalAuthenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-  if (!token) {
-    return next();
+  
+  if (token) {
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) return next();
+      req.user = user;
+      next();
+    });
+    return;
   }
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return next();
-    req.user = user;
+  // Try to use default user if no token provided
+  try {
+    const db = getDb();
+    const defaultUser = await db.get('SELECT * FROM users WHERE username = ?', ['interviewer']);
+    if (defaultUser) {
+      req.user = { 
+        userId: defaultUser.id, 
+        username: defaultUser.username, 
+        isAdmin: Boolean(defaultUser.is_admin) 
+      };
+    }
     next();
-  });
+  } catch (e) {
+    next();
+  }
 };
 
 // Resolve API key for server-side use

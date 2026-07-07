@@ -22,7 +22,7 @@ const AppContent: React.FC = () => {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | number | undefined>();
   const [currentCards, setCurrentCards] = useState<any[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [user, setUser] = useState<any>(getCurrentUser());
+  const [user, setUser] = useState<any>(getCurrentUser() || { username: 'interviewer', isAdmin: true });
   const [showAuthModal, setShowAuthModal] = useState(false);
   const location = useLocation();
 
@@ -214,21 +214,6 @@ const AppContent: React.FC = () => {
     }
   };
     
-  if (!user) {
-    return (
-      <div className="app-container">
-        <Header />
-        <main className="main-content">
-          <AuthModal 
-            onClose={() => {}} 
-            onLoginSuccess={handleLoginSuccess} 
-          />
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="app-container">
       <Header />

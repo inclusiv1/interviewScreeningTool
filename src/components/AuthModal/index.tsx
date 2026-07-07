@@ -36,11 +36,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, onLoginSuccess }) => {
     <div className="modal-overlay">
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <h2 className="selector-title">{isLogin ? 'Login' : 'Register'}</h2>
-        {isLogin && (
-          <p style={{ textAlign: 'center', marginBottom: '15px', color: '#666' }}>
-            Please log in to access the application.
-          </p>
-        )}
         {error && <div className="error-message" style={{ marginBottom: '15px', textAlign: 'center' }}>{error}</div>}
         <form className="ai-form" onSubmit={handleSubmit}>
           <div className="form-group">

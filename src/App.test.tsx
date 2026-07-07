@@ -38,7 +38,7 @@ describe('App', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(api.fetchDefaultQuestions).mockResolvedValue([]);
-    vi.mocked(api.getCurrentUser).mockReturnValue({ username: 'testuser' });
+    vi.mocked(api.getCurrentUser).mockReturnValue({ username: 'interviewer', isAdmin: true });
     vi.mocked(questionService.getQuestionSets).mockReturnValue([]);
   });
 

@@ -34,7 +34,7 @@ const Navigation: React.FC<NavigationProps> = ({ user, handleLogout, setShowAuth
       </RouterNavLink>
       
       <div className="user-section">
-        {user ? (
+        {user && user.username !== 'interviewer' ? (
           <>
             <span>Welcome, {user.username}</span>
             <button className="user-button" onClick={handleLogout}>Logout</button>

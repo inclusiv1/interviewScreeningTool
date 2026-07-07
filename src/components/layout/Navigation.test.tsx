@@ -26,8 +26,8 @@ describe('Navigation', () => {
     expect(screen.getByText('Question Generator')).toBeInTheDocument();
   });
 
-  it('shows Login button when user is not logged in', () => {
-    renderNav(null);
+  it('shows Login button when default interviewer user is "logged in"', () => {
+    renderNav({ username: 'interviewer' });
     const loginButton = screen.getByText('Login / Register');
     expect(loginButton).toBeInTheDocument();
     
@@ -35,7 +35,7 @@ describe('Navigation', () => {
     expect(mockSetShowAuthModal).toHaveBeenCalledWith(true);
   });
 
-  it('shows Welcome message and Logout button when user is logged in', () => {
+  it('shows Welcome message and Logout button when a real user is logged in', () => {
     renderNav({ username: 'testuser' });
     expect(screen.getByText('Welcome, testuser')).toBeInTheDocument();
     const logoutButton = screen.getByText('Logout');
